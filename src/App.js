@@ -1,6 +1,7 @@
 import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
+import Header from './Header'
 import Search from './Search'
 
 class BooksApp extends React.Component {
@@ -23,9 +24,7 @@ class BooksApp extends React.Component {
         <Search onCloseSearchPage={this.handleCloseSearchPage} />
         : (
           <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
+            <Header />
             <div className="list-books-content">
               <div>
                 <div className="bookshelf">
