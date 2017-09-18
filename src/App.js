@@ -28,21 +28,25 @@ class BooksApp extends React.Component {
   handleShowSearchPage = () => this.setState({ showSearchPage: true })
 
   handleSearch(searchValue) {
-    if (searchValue === '') {
-      return this.setState({ books: []})
-    }
     // normalize search queries to be capitalised
-    const query = searchValue[0].toUpperCase() + searchValue.slice(1)
+    const query = searchValue.length > 0 ? searchValue[0].toUpperCase() + searchValue.slice(1) : ''
     BooksAPI.search(query, 20)
       .then(results => {
-        if (results.error === "empty query") {
-          return
+        if (results === undefined) {
+          return this.setState({ books: [] })
         }
+        // if search query isn't valid, return an empty array to BooksGrid
+        if (results && results.items && results.items.length === 0) {
+          return this.setState({ books: [] })
+        }
+        // if everything is normal, set state as response from BooksAPI
         this.setState({ books: results })
       })
   }
 
   render() {
+    const { books } = this.state
+
     return (
       <div className="app">
         {this.state.showSearchPage ? 
@@ -55,9 +59,9 @@ class BooksApp extends React.Component {
             <Header />
             <div className="list-books-content">
               <div>
-                <BookShelf name="Currently Reading" books={this.state.books} />
-                <BookShelf name="Want to Read" books={this.state.books} />
-                <BookShelf name="Read" books={this.state.books} />
+                {books && <BookShelf name="Currently Reading" books={books} />}
+                {books && <BookShelf name="Want to Read" books={books} />}
+                {books && <BookShelf name="Read" books={books} />}
               </div>
             </div>
             <SearchButton onShowSearchPage={this.handleShowSearchPage} />

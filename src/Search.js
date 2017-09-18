@@ -43,7 +43,7 @@ class Search extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-          <BooksGrid books={books} />
+          {books && <BooksGrid books={books} />}
         </div>
       </div>
     )
