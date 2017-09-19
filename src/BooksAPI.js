@@ -38,7 +38,7 @@ export const getAll = () =>
 /**
  * Update a book's shelf 
  * @param {Object} book - the book to update 
- * @param {String} shelf - the shelf to place on
+ * @param {String} shelf - the shelf to place on (one of: ["wantToRead", "currentlyReading", "read"])
  * @return {Object} - a promise which resolves to a JSON object containing the book
  */
 export const update = (book, shelf) =>

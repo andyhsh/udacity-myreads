@@ -1,26 +1,51 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import BooksGrid from './BooksGrid'
+import * as BooksAPI from './BooksAPI'
 
 class Search extends React.Component {
+
+  static propTypes = {
+    books: PropTypes.array,
+    onCloseSearchPage: PropTypes.func.isRequired    
+  }
+
   state = {
-    query: ''
+    query: '',
+    results: [],
+    isSearching: false
   }
 
-  // reset search page
-  componentDidMount() {
-    this.props.handleSearch('')
-  }
-
-  // pass search query to main container to handle
-  onSearch = (e) => {
-    const searchValue = e.target.value
+  handleSearch = (event) => {
+    // Set input field value (controlled component)
+    const searchValue = event.target.value
     this.setState({ query: searchValue })
-    this.props.handleSearch(searchValue)
+
+    // normalize search queries to be capitalised
+    const query = searchValue.trim().length > 0 ? searchValue[0].toUpperCase() + searchValue.slice(1) : ''
+    if (query.length > 0) {
+
+      // Set loading indicator
+      this.setState({ isSearching: true })
+
+      BooksAPI.search(query, 20)
+        .then(results => {
+          // if search query is valid, results will be set as a returned array of books
+          // if an array is not returned, something as gone wrong => reset state
+          if (Array.isArray(results)) {
+            return this.setState({ results, isSearching: false })
+          } else {
+            this.setState({ results: [], isSearching: false })
+          }
+        })
+    } else {
+      this.setState({ results: [] })
+    }
   }
 
   render() {
-    const { onCloseSearchPage, books} = this.props
+    const { onCloseSearchPage } = this.props
+    const { query, results, isSearching } = this.state
 
     return (
       <div className="search-books">
@@ -38,21 +63,33 @@ class Search extends React.Component {
             <input
               type="text"
               placeholder="Search by title or author"
-              onChange={this.onSearch}
-              value={this.state.query} />
+              onChange={this.handleSearch}
+              value={query} />
           </div>
         </div>
         <div className="search-books-results">
-          {books && <BooksGrid books={books} />}
+
+          {/* If there is a query and results are returned, render BooksGrid */}       
+          { !!results.length &&
+            !!query.length && ( 
+            <BooksGrid 
+              books={results} 
+              isSearching={isSearching} 
+            />
+          )}
+
+          {/* If there is a query and no results are returned, render the following */}
+          { !!query.length &&
+            !results.length && (
+              <div className="no-results-found">
+                No results found. Please try a different search query.
+              </div>
+          )}
+
         </div>
       </div>
     )
   }
-}
-
-Search.propTypes = {
-  books: PropTypes.array,
-  onCloseSearchPage: PropTypes.func.isRequired
 }
 
 export default Search
