@@ -17,13 +17,25 @@ class BooksApp extends React.Component {
     showSearchPage: false,
     books: []
   }
+
+  componentDidMount() {
+    this.handleGetAllBooks()
+  }
   
   handleCloseSearchPage = () => this.setState({ showSearchPage: false})
   handleShowSearchPage = () => this.setState({ showSearchPage: true })
 
   handleUpdateBook(book, shelf) {
-    BooksAPI.update(book.id)
+    BooksAPI.update(book, shelf)
       .then(response => {
+        console.log(response)
+      })
+  }
+
+  handleGetAllBooks() {
+    BooksAPI.getAll()
+      .then(response => {
+        this.setState({ books: response })
         console.log(response)
       })
   }
@@ -31,18 +43,36 @@ class BooksApp extends React.Component {
   render() {
     const { books } = this.state
 
+    const currentlyReading = books.filter(book => book.shelf === 'currentlyReading')
+    const wantToRead = books.filter(book => book.shelf === 'wantToRead')
+    const read = books.filter(book => book.shelf === 'read')
+
     return (
       <div className="app">
         {this.state.showSearchPage ? 
-        <Search onCloseSearchPage={this.handleCloseSearchPage} />
+        <Search 
+          onCloseSearchPage={this.handleCloseSearchPage}
+          onUpdateBook={this.handleUpdateBook} />
         : (
           <div className="list-books">
             <Header />
             <div className="list-books-content">
               <div>
-                {/* {books && <BookShelf name="Currently Reading" books={books} />}
-                {books && <BookShelf name="Want to Read" books={books} />}
-                {books && <BookShelf name="Read" books={books} />} */}
+                <BookShelf 
+                  name="Currently Reading" 
+                  books={currentlyReading} 
+                  onUpdateBook={this.handleUpdateBook}
+                />
+                <BookShelf 
+                  name="Want to Read" 
+                  books={wantToRead} 
+                  onUpdateBook={this.handleUpdateBook}
+                />
+                <BookShelf 
+                  name="Read" 
+                  books={read} 
+                  onUpdateBook={this.handleUpdateBook} 
+                />
               </div>
             </div>
             <SearchButton onShowSearchPage={this.handleShowSearchPage} />
