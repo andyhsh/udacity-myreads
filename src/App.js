@@ -25,10 +25,11 @@ class BooksApp extends React.Component {
   handleCloseSearchPage = () => this.setState({ showSearchPage: false})
   handleShowSearchPage = () => this.setState({ showSearchPage: true })
 
-  handleUpdateBook(book, shelf) {
+  handleUpdateBook = (book, shelf) => {
     BooksAPI.update(book, shelf)
       .then(response => {
         console.log(response)
+        debugger
       })
   }
 
@@ -43,6 +44,7 @@ class BooksApp extends React.Component {
   render() {
     const { books } = this.state
 
+    // sort books by shelves
     const currentlyReading = books.filter(book => book.shelf === 'currentlyReading')
     const wantToRead = books.filter(book => book.shelf === 'wantToRead')
     const read = books.filter(book => book.shelf === 'read')
@@ -52,7 +54,8 @@ class BooksApp extends React.Component {
         {this.state.showSearchPage ? 
         <Search 
           onCloseSearchPage={this.handleCloseSearchPage}
-          onUpdateBook={this.handleUpdateBook} />
+          onUpdateBook={this.handleUpdateBook}
+          books={books} />
         : (
           <div className="list-books">
             <Header />
