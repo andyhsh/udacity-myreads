@@ -19,7 +19,10 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
-    this.handleGetAllBooks()
+    BooksAPI.getAll()
+    .then(books => {
+      this.setState({ books })
+    })
   }
   
   handleCloseSearchPage = () => this.setState({ showSearchPage: false})
@@ -28,16 +31,12 @@ class BooksApp extends React.Component {
   handleUpdateBook = (book, shelf) => {
     BooksAPI.update(book, shelf)
       .then(response => {
-        console.log(response)
-        debugger
-      })
-  }
+        const books = [...this.state.books]
 
-  handleGetAllBooks() {
-    BooksAPI.getAll()
-      .then(response => {
-        this.setState({ books: response })
-        console.log(response)
+        // Update the book's shelf if it is already on an existing shelf
+        let updatedBook = books.find(b => b.id === book.id)
+        updatedBook.shelf = shelf      
+        this.setState({ books })
       })
   }
 
