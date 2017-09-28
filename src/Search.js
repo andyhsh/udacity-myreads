@@ -44,7 +44,7 @@ class Search extends React.Component {
   }
 
   render() {
-    const { onCloseSearchPage } = this.props
+    const { onCloseSearchPage, onUpdateBook } = this.props
     const { query, results, isSearching } = this.state
 
     return (
@@ -75,6 +75,7 @@ class Search extends React.Component {
             <BooksGrid 
               books={results} 
               isSearching={isSearching} 
+              onUpdateBook={onUpdateBook}
             />
           )}
 
