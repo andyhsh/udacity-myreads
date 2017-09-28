@@ -1,10 +1,8 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import Header from './Header'
+import ShelfContainer from './ShelfContainer'
 import Search from './Search'
-import BookShelf from './BookShelf'
-import SearchButton from './SearchButton'
 
 class BooksApp extends React.Component {
   state = {
@@ -64,32 +62,17 @@ class BooksApp extends React.Component {
         <Search 
           onCloseSearchPage={this.handleCloseSearchPage}
           onUpdateBook={this.handleUpdateBook}
-          books={books} />
-        : (
-          <div className="list-books">
-            <Header />
-            <div className="list-books-content">
-              <div>
-                <BookShelf 
-                  name="Currently Reading" 
-                  books={currentlyReading} 
-                  onUpdateBook={this.handleUpdateBook}
-                />
-                <BookShelf 
-                  name="Want to Read" 
-                  books={wantToRead} 
-                  onUpdateBook={this.handleUpdateBook}
-                />
-                <BookShelf 
-                  name="Read" 
-                  books={read} 
-                  onUpdateBook={this.handleUpdateBook} 
-                />
-              </div>
-            </div>
-            <SearchButton onShowSearchPage={this.handleShowSearchPage} />
-          </div>
-        )}
+          books={books} 
+        />
+        : 
+        <ShelfContainer
+          onShowSearchPage={this.handleShowSearchPage}
+          onUpdateBook={this.handleUpdateBook}
+          books={books}
+          currentlyReading={currentlyReading}
+          wantToRead={wantToRead}
+          read={read} 
+        />}
       </div>
     )
   }
