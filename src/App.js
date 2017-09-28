@@ -36,11 +36,13 @@ class BooksApp extends React.Component {
         // Check if the book is already on an existing shelf
         let bookExists = books.find(b => b.id === book.id)
 
+        // Change shelf location if book exists
         if (bookExists) {
           bookExists.shelf = shelf      
           this.setState({ books })
         
-        } else if (typeof bookExists !== 'undefined') {
+          // Add book to shelf if book doesn't exist
+        } else if (typeof bookExists === 'undefined') {
           book.shelf = shelf
           let updatedBooks = [...books, book]
           this.setState({ books: updatedBooks })

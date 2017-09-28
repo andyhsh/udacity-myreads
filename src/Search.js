@@ -33,7 +33,16 @@ class Search extends React.Component {
           // if search query is valid, results will be set as a returned array of books
           // if an array is not returned, something as gone wrong => reset state
           if (Array.isArray(results)) {
-            return this.setState({ results, isSearching: false })
+            let books = [...this.props.books]
+
+            // check if results are currently on bookshelf and add shelf to results if so
+            results.forEach( book => {
+              let bookShelved = books.find(b => b.id === book.id)
+              bookShelved ? book.shelf = bookShelved.shelf : null
+            })
+
+            this.setState({ results, isSearching: false })
+
           } else {
             this.setState({ results: [], isSearching: false })
           }
