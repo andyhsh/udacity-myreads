@@ -1,8 +1,9 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const SearchButton = ({onShowSearchPage}) => (
+const SearchButton = () => (
   <div className="open-search">
-    <a onClick={() => onShowSearchPage()}>Add a book</a>
+    <Link to="/search">Add a book</Link>
   </div>
 )
 

@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+
 import BooksGrid from './BooksGrid'
 import * as BooksAPI from './BooksAPI'
 
@@ -7,7 +9,6 @@ class Search extends React.Component {
 
   static propTypes = {
     books: PropTypes.array,
-    onCloseSearchPage: PropTypes.func.isRequired    
   }
 
   state = {
@@ -38,7 +39,7 @@ class Search extends React.Component {
             // check if results are currently on bookshelf and add shelf to results if so
             results.forEach( book => {
               let bookShelved = books.find(b => b.id === book.id)
-              bookShelved ? book.shelf = bookShelved.shelf : null
+              if (bookShelved) book.shelf = bookShelved.shelf
             })
 
             this.setState({ results, isSearching: false })
@@ -53,13 +54,13 @@ class Search extends React.Component {
   }
 
   render() {
-    const { onCloseSearchPage, onUpdateBook } = this.props
+    const { onUpdateBook } = this.props
     const { query, results, isSearching } = this.state
 
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <a className="close-search" onClick={() => onCloseSearchPage()}>Close</a>
+          <Link className="close-search" to="/">Close</Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
