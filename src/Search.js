@@ -6,9 +6,9 @@ import BooksGrid from './BooksGrid'
 import * as BooksAPI from './BooksAPI'
 
 class Search extends React.Component {
-
   static propTypes = {
-    books: PropTypes.array,
+    books: PropTypes.array.isRequired,
+    onUpdateBook: PropTypes.func.isRequired
   }
 
   state = {

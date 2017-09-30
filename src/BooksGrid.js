@@ -2,9 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 class BooksGrid extends React.Component {
-
   static propTypes = {
-    books: PropTypes.array,  
+    books: PropTypes.array.isRequired,  
     isSearching: PropTypes.bool,
     onUpdateBook: PropTypes.func.isRequired  
   }
