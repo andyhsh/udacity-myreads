@@ -91,9 +91,10 @@ class Search extends React.Component {
 
           {/* If there is a query and no results are returned, render the following */}
           { !!query.length &&
-            !results.length && (
-              <div className="no-results-found">
-                No results found. Please try a different search query.
+            !results.length &&
+            !isSearching && (
+              <div>
+                No results found for <span className="no-results-found">{`"${query}"`}</span>. Please try a different search query.
               </div>
           )}
 
