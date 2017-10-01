@@ -5,41 +5,32 @@ import PropTypes from 'prop-types'
 
 // Question for reviewer: If I want to make my Modal component reusable anywhere, not just for displaying books, how would I go about refactoring this component?
 
-class Modal extends React.Component {
-  static = {
-    onCloseModal: PropTypes.func.isRequired
+const Modal = ({ isOpen, content, onCloseModal }) => {
+  const { authors } = content
+
+  if (!isOpen) {
+    return null
   }
 
-  renderAuthors() {
-    const { authors } = this.props.content
-    if (authors.length === 1) {
-      return authors[0]
-    } else {
-      return authors.join(', ')
-    }
-  }
+  const authorList = authors.length === 1 ? authors[0] : authors.join(', ')    
 
-  render() {
-    const { isOpen, content, onCloseModal } = this.props
-
-    if (!isOpen) {
-      return null
-    }
-
-    return (
-      <div>
-        <div className="modal-box">
-          <div className="modal-content">
-            <h1>{content.title}</h1>
-            <p className="modal-author">{this.renderAuthors()}</p>
-            <p className="modal-description">{content.description ? content.description : "No description available."}</p>
-            <div className="modal-close-button" onClick={onCloseModal}>Close</div>
-          </div>
+  return (
+    <div>
+      <div className="modal-box">
+        <div className="modal-content">
+          <h1>{content.title}</h1>
+          <p className="modal-author">{authorList}</p>
+          <p className="modal-description">{content.description ? content.description : "No description available."}</p>
+          <div className="modal-close-button" onClick={onCloseModal}>Close</div>
         </div>
-        <div className="modal-backdrop" onClick={onCloseModal} />
       </div>
-    )
-  }
+      <div className="modal-backdrop" onClick={onCloseModal} />
+    </div>
+  )
+}
+
+Modal.propTypes = {
+  onCloseModal: PropTypes.func.isRequired  
 }
 
 export default Modal
