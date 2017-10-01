@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import BooksGrid from './BooksGrid'
 import * as BooksAPI from './BooksAPI'
+import { getSearchSuggestions } from './searchTerms'
 
 class Search extends React.Component {
   static propTypes = {
@@ -56,6 +57,7 @@ class Search extends React.Component {
   render() {
     const { onUpdateBook } = this.props
     const { query, results, isSearching } = this.state
+    const suggestions = getSearchSuggestions()    
 
     return (
       <div className="search-books">
@@ -94,7 +96,7 @@ class Search extends React.Component {
             !results.length &&
             !isSearching && (
               <div>
-                No results found for <span className="no-results-found">{`"${query}"`}</span>. Please try a different search query.
+                No results found for <span className="no-results-found">"{query}"</span>. Try searching for <span className="no-results-found">"{suggestions[0]}"</span> or <span className="no-results-found">"{suggestions[1]}"</span> instead.
               </div>
           )}
 
