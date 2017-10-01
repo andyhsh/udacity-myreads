@@ -1,11 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Modal from './Modal'
 
 class BooksGrid extends React.Component {
   static propTypes = {
     books: PropTypes.array.isRequired,  
     isSearching: PropTypes.bool,
     onUpdateBook: PropTypes.func.isRequired  
+  }
+
+  state = {
+    openModal: false,
+    modalContent: {}
   }
 
   renderAuthors(authors) {
@@ -16,12 +22,21 @@ class BooksGrid extends React.Component {
     }
   }
 
+  handleOpenModal = (book) => {
+    this.setState({ openModal: true, modalContent: book })
+  }
+
+  handleCloseModal = () => {
+    this.setState({ openModal: false, modalContent: {} })
+  }
+
   handleChangeShelf(shelf, book) {
     this.props.onUpdateBook(book, shelf)
   }
 
   render() {
     const { books, isSearching } = this.props
+    const { openModal, modalContent } = this.state
 
     if (isSearching) {
       return <div>Loading...</div>
@@ -29,11 +44,17 @@ class BooksGrid extends React.Component {
     
     return (
       <ol className="books-grid">
+
+        <Modal isOpen={openModal} onCloseModal={this.handleCloseModal} content={modalContent} />
+
         {books.map(book => (
           <li key={book.id}>
             <div className="book">
               <div className="book-top">
-                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail}` }}></div>
+                <div className="book-cover" 
+                  style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail}` }}
+                  onClick={() => this.handleOpenModal(book)} 
+                />
                 <div className="book-shelf-changer">
                   <select value={book.hasOwnProperty('shelf') ? book.shelf : "none"} onChange={(e) => this.handleChangeShelf(e.target.value, book)}>
                     <option value="none" disabled>Move to...</option>

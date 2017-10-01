@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Header = () => (
+const Header = (props) => (
   <div className="list-books-title">
-    <h1>MyReads</h1>
+    <h1>{props.children}</h1>
   </div>
 )
 

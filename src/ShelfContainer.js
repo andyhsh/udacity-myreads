@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 
 const ShelfContainer = ({ currentlyReading, wantToRead, read, onUpdateBook }) => (
   <div className="list-books">
-    <Header />
+    <Header>MyReads</Header>
     <div className="list-books-content">
       <div>
         <BookShelf 
