@@ -47,12 +47,15 @@ class BooksGrid extends React.Component {
 
         <Modal isOpen={openModal} onCloseModal={this.handleCloseModal} content={modalContent} />
 
-        {books.map(book => (
+        {books.map(book => {
+          const thumbnail = book && book.imageLinks && book.imageLinks.thumbnail ? book.imageLinks.thumbnail : 'https://books.google.com/googlebooks/images/no_cover_thumb.gif'
+
+          return (
           <li key={book.id}>
             <div className="book">
               <div className="book-top">
                 <div className="book-cover" 
-                  style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail}` }}
+                  style={{ width: 128, height: 193, backgroundImage: `url(${thumbnail}`, backgroundSize: 'cover' }}
                   onClick={() => this.handleOpenModal(book)} 
                 />
                 <div className="book-shelf-changer">
@@ -69,7 +72,8 @@ class BooksGrid extends React.Component {
               <div className="book-authors">{book.authors ? this.renderAuthors(book.authors) : null}</div>
             </div>
           </li>
-        ))}
+        )}
+        )}
       </ol>
     )
   }

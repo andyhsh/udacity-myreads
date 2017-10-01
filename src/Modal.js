@@ -32,7 +32,6 @@ class Modal extends React.Component {
           <div className="modal-content">
             <h1>{content.title}</h1>
             <p className="modal-author">{this.renderAuthors()}</p>
-            <img className="modal-cover" src={content.imageLinks.thumbnail} alt={content.title} />
             <p className="modal-description">{content.description ? content.description : "No description available."}</p>
             <div className="modal-close-button" onClick={onCloseModal}>Close</div>
           </div>
