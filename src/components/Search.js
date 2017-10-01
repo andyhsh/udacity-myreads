@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import BooksGrid from './BooksGrid'
-import * as BooksAPI from './BooksAPI'
-import { getSearchSuggestions } from './searchTerms'
+import * as BooksAPI from '../BooksAPI'
+import { getSearchSuggestions } from '../searchTerms'
 
 class Search extends React.Component {
   static propTypes = {
