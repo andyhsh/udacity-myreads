@@ -6,7 +6,8 @@ class BooksGrid extends React.Component {
   static propTypes = {
     books: PropTypes.array.isRequired,  
     isSearching: PropTypes.bool,
-    onUpdateBook: PropTypes.func.isRequired  
+    onUpdateBook: PropTypes.func.isRequired,
+    onRatingBook: PropTypes.func.isRequired
   }
 
   state = {
@@ -20,6 +21,20 @@ class BooksGrid extends React.Component {
     } else {
       return `${authors[0]}, et al.`
     }
+  }
+
+  renderRating(book) {
+    const { userRating } = book
+    const { onRatingBook } = this.props
+    return (
+      <div className="book-rating">
+        <i onClick={() => onRatingBook(book, 1)} className={userRating >= 1 ? "fa fa-star" : "fa fa-star-o"} aria-hidden="true" />
+        <i onClick={() => onRatingBook(book, 2)} className={userRating >= 2 ? "fa fa-star" : "fa fa-star-o"} aria-hidden="true" />
+        <i onClick={() => onRatingBook(book, 3)} className={userRating >= 3 ? "fa fa-star" : "fa fa-star-o"} aria-hidden="true" />
+        <i onClick={() => onRatingBook(book, 4)} className={userRating >= 4 ? "fa fa-star" : "fa fa-star-o"} aria-hidden="true" />
+        <i onClick={() => onRatingBook(book, 5)} className={userRating === 5 ? "fa fa-star" : "fa fa-star-o"} aria-hidden="true" />
+      </div>
+    )
   }
 
   handleOpenModal = (book) => {
@@ -70,6 +85,7 @@ class BooksGrid extends React.Component {
               </div>
               <div className="book-title">{book.title}</div>
               <div className="book-authors">{book.authors ? this.renderAuthors(book.authors) : null}</div>
+              {this.renderRating(book)}
             </div>
           </li>
         )}

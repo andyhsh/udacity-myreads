@@ -2,7 +2,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 
 import '../App.css'
-import * as BooksAPI from '../BooksAPI'
+import * as BooksAPI from '../utils/BooksAPI'
 import ShelfContainer from './ShelfContainer'
 import Search from './Search'
 
@@ -34,10 +34,26 @@ class BooksApp extends React.Component {
           // Add book to shelf if book doesn't exist
         } else if (typeof bookExists === 'undefined') {
           book.shelf = shelf
-          let updatedBooks = [...books, book]
+          const updatedBooks = [...books, book]
           this.setState({ books: updatedBooks })
         } 
       })
+  }
+
+  handleRatingBook = (book, userRating) => {
+    const books = [...this.state.books]
+    let bookExists = books.find(b => b.id === book.id)
+    if (bookExists) {
+      debugger
+      bookExists.userRating = userRating
+      this.setState({ books })
+    }
+    else if (typeof bookExists ==='undefined') {
+      debugger
+      book.userRating = userRating
+      const updatedBooks = [...books, book]
+      this.setState({ books: updatedBooks })
+    }
   }
 
   render() {
@@ -56,6 +72,7 @@ class BooksApp extends React.Component {
             <Search 
               onCloseSearchPage={this.handleCloseSearchPage}
               onUpdateBook={this.handleUpdateBook}
+              onRatingBook={this.handleRatingBook}
               books={books} 
             />}
         />
@@ -65,6 +82,7 @@ class BooksApp extends React.Component {
             <ShelfContainer
               onShowSearchPage={this.handleShowSearchPage}
               onUpdateBook={this.handleUpdateBook}
+              onRatingBook={this.handleRatingBook}
               books={books}
               currentlyReading={currentlyReading}
               wantToRead={wantToRead}

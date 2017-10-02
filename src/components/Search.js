@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import BooksGrid from './BooksGrid'
-import * as BooksAPI from '../BooksAPI'
-import { getSearchSuggestions } from '../searchTerms'
+import * as BooksAPI from '../utils/BooksAPI'
+import { getSearchSuggestions } from '../utils/searchTerms'
 
 class Search extends React.Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
-    onUpdateBook: PropTypes.func.isRequired
+    onUpdateBook: PropTypes.func.isRequired,
+    onRatingBook: PropTypes.func.isRequired
   }
 
   state = {
@@ -37,10 +38,13 @@ class Search extends React.Component {
           if (Array.isArray(results)) {
             let books = [...this.props.books]
 
-            // check if results are currently on bookshelf and add shelf to results if so
+            // check if results are currently on bookshelf and add shelf and rating to results 
             results.forEach( book => {
               let bookShelved = books.find(b => b.id === book.id)
-              if (bookShelved) book.shelf = bookShelved.shelf
+              if (bookShelved) {
+                book.shelf = bookShelved.shelf
+                book.userRating = bookShelved.userRating
+              }
             })
 
             this.setState({ results, isSearching: false })
@@ -55,7 +59,7 @@ class Search extends React.Component {
   }
 
   render() {
-    const { onUpdateBook } = this.props
+    const { onUpdateBook, onRatingBook } = this.props
     const { query, results, isSearching } = this.state
     const suggestions = getSearchSuggestions()    
 
@@ -88,6 +92,7 @@ class Search extends React.Component {
               books={results} 
               isSearching={isSearching} 
               onUpdateBook={onUpdateBook}
+              onRatingBook={onRatingBook}
             />
           )}
 
