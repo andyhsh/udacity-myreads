@@ -28,7 +28,7 @@ class BooksApp extends React.Component {
 
         // Change shelf location if book exists
         if (bookExists) {
-          bookExists.shelf = shelf      
+          bookExists.shelf = shelf
           this.setState({ books })
         
           // Add book to shelf if book doesn't exist
