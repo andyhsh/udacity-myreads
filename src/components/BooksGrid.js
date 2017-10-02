@@ -64,7 +64,7 @@ class BooksGrid extends React.Component {
         <Modal isOpen={openModal} onCloseModal={this.handleCloseModal} content={modalContent} />
 
         {books.map(book => {
-          const thumbnail = book && book.imageLinks && book.imageLinks.thumbnail ? book.imageLinks.thumbnail : 'https://books.google.com/googlebooks/images/no_cover_thumb.gif'
+          const thumbnail = book.imageLinks ? book.imageLinks.thumbnail.replace('http', 'https') : 'https://books.google.com/googlebooks/images/no_cover_thumb.gif'
 
           return (
           <li key={book.id}>
