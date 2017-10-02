@@ -11,6 +11,7 @@ class BooksApp extends React.Component {
     books: []
   }
 
+  //TODO: get userRatings data from localStorage and map to the books retrieved
   componentDidMount() {
     BooksAPI.getAll()
     .then(books => {
@@ -40,16 +41,16 @@ class BooksApp extends React.Component {
       })
   }
 
+  //TODO: save ratings to localStorage
+  //Question: Function does not properly render the ratings for the search page on books that are already on the shelf until you go back to the shelf page. But books that are not on the shelf render the ratings properly when rated. Not sure why?
   handleRatingBook = (book, userRating) => {
     const books = [...this.state.books]
     let bookExists = books.find(b => b.id === book.id)
     if (bookExists) {
-      debugger
       bookExists.userRating = userRating
       this.setState({ books })
     }
     else if (typeof bookExists ==='undefined') {
-      debugger
       book.userRating = userRating
       const updatedBooks = [...books, book]
       this.setState({ books: updatedBooks })
@@ -66,7 +67,6 @@ class BooksApp extends React.Component {
 
     return (
       <div className="app">
-        {/* this.state.showSearchPage */}
         <Route exact path="/search" 
           render={() => 
             <Search 

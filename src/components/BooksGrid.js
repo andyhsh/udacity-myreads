@@ -23,6 +23,7 @@ class BooksGrid extends React.Component {
     }
   }
 
+  //Question: there should be a much more efficient way to handle rendering the ratings? Feels like I'm really duplicating a lot of the code here.
   renderRating(book) {
     const { userRating } = book
     const { onRatingBook } = this.props
