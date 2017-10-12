@@ -5,8 +5,14 @@ import { Link } from 'react-router-dom'
 import BooksGrid from './BooksGrid'
 import * as BooksAPI from '../utils/BooksAPI'
 import { getSearchSuggestions } from '../utils/searchTerms'
+import { debounce } from '../utils/debounce'
 
 class Search extends React.Component {
+  constructor(props) {
+    super(props)
+    // instantiate a single debounced function per component instance
+    this.fireSearch = debounce(this.fireSearch, 500)
+  }
   static propTypes = {
     books: PropTypes.array.isRequired,
     onUpdateBook: PropTypes.func.isRequired,
@@ -17,6 +23,31 @@ class Search extends React.Component {
     query: '',
     results: [],
     isSearching: false
+  }
+
+  fireSearch = (query) => {
+    BooksAPI.search(query, 20)
+    .then(results => {
+      // if search query is valid, results will be set as a returned array of books
+      // if an array is not returned, something as gone wrong => reset state
+      if (Array.isArray(results)) {
+        let books = [...this.props.books]
+
+        // check if results are currently on bookshelf and add shelf and rating to results 
+        results.forEach( book => {
+          let bookShelved = books.find(b => b.id === book.id)
+          if (bookShelved) {
+            book.shelf = bookShelved.shelf
+            book.userRating = bookShelved.userRating
+          }
+        })
+
+        this.setState({ results, isSearching: false })
+
+      } else {
+        this.setState({ results: [], isSearching: false })
+      }
+    })
   }
 
   handleSearch = (event) => {
@@ -30,29 +61,8 @@ class Search extends React.Component {
 
       // Set loading indicator
       this.setState({ isSearching: true })
-
-      BooksAPI.search(query, 20)
-        .then(results => {
-          // if search query is valid, results will be set as a returned array of books
-          // if an array is not returned, something as gone wrong => reset state
-          if (Array.isArray(results)) {
-            let books = [...this.props.books]
-
-            // check if results are currently on bookshelf and add shelf and rating to results 
-            results.forEach( book => {
-              let bookShelved = books.find(b => b.id === book.id)
-              if (bookShelved) {
-                book.shelf = bookShelved.shelf
-                book.userRating = bookShelved.userRating
-              }
-            })
-
-            this.setState({ results, isSearching: false })
-
-          } else {
-            this.setState({ results: [], isSearching: false })
-          }
-        })
+      this.fireSearch(query)
+      
     } else {
       this.setState({ results: [] })
     }
@@ -61,7 +71,7 @@ class Search extends React.Component {
   render() {
     const { onUpdateBook, onRatingBook } = this.props
     const { query, results, isSearching } = this.state
-    const suggestions = getSearchSuggestions()    
+    const suggestions = getSearchSuggestions()   
 
     return (
       <div className="search-books">
